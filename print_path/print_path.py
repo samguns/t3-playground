@@ -42,6 +42,12 @@ def search(grid, init, goal, cost):
     closed = [[0 for row in range(len(grid[0]))] for col in range(len(grid))]
     closed[init[0]][init[1]] = 1
 
+    rows = len(grid)
+    cols = len(grid[0])
+    actions = [[0] * cols for c in range(rows)]
+    paths = [[' '] * cols for c in range(rows)]
+    paths[goal[0]][goal[1]] = '*'
+
     x = init[0]
     y = init[1]
     g = 0
@@ -75,7 +81,18 @@ def search(grid, init, goal, cost):
                             open.append([g2, x2, y2])
                             closed[x2][y2] = 1
 
-    return expand  # make sure you return the shortest path
+                            actions[x2][y2] = i
+
+    x = goal[0]
+    y = goal[1]
+    while x != init[0] or y != init[1]:
+        x2 = x - delta[actions[x][y]][0]
+        y2 = y - delta[actions[x][y]][1]
+        paths[x2][y2] = delta_name[actions[x][y]]
+        x = x2
+        y = y2
+
+    return paths  # make sure you return the shortest path
 
 
 result = search(grid, init, goal, cost)
