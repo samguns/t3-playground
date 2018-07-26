@@ -32,4 +32,39 @@ def compute_value(grid, goal, cost):
 
     # make sure your function returns a grid of values as
     # demonstrated in the previous video.
+    rows = len(grid)
+    cols = len(grid[0])
+    marked = [[0] * cols for c in range(rows)]
+
+    x = goal[0]
+    y = goal[1]
+    c = 0
+    value = [[99] * cols for c in range(rows)]
+    value[x][y] = c
+    marked[x][y] = 1
+
+    open_list = [[c, x, y]]
+    while len(open_list) > 0:
+        open_list.sort(reverse=True)
+        check = open_list.pop()
+        x = check[1]
+        y = check[2]
+        c = check[0]
+
+        for i in range(len(delta)):
+            x2 = x + delta[i][0]
+            y2 = y + delta[i][1]
+            if x2 >= 0 and x2 < rows and y2 >= 0 and y2 < cols:
+                if marked[x2][y2] == 0 and grid[x2][y2] == 0:
+                    c2 = c + cost
+                    marked[x2][y2] = 1
+                    value[x2][y2] = c2
+
+                    open_list.append([c2, x2, y2])
+
     return value
+
+
+result = compute_value(grid, goal, cost)
+for r in result:
+    print(r)
